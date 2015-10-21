@@ -40,6 +40,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import it.feio.android.omninotes.async.DataBackupIntentService;
 import it.feio.android.omninotes.helpers.AnalyticsHelper;
+import it.feio.android.omninotes.intro.IntroActivity;
 import it.feio.android.omninotes.models.ONStyle;
 import it.feio.android.omninotes.utils.*;
 import org.apache.commons.lang.StringUtils;
@@ -566,6 +567,7 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 
 
+
 		// Instructions
 		Preference instructions = findPreference("settings_tour_show_again");
 		if (instructions != null) {
@@ -580,7 +582,12 @@ public class SettingsFragment extends PreferenceFragment {
 								AnalyticsHelper.trackEvent(AnalyticsHelper.CATEGORIES.SETTING, "settings_tour_show_again");
 
 								prefs.edit().putBoolean(Constants.PREF_TOUR_COMPLETE, false).commit();
-								MiscUtils.restartApp(getActivity().getApplicationContext(), MainActivity.class);
+
+								//Call finish, we dont want to return to settings after intro
+								getActivity().finish();
+								Intent introIntent = new Intent(getActivity().getApplicationContext(), IntroActivity.class);
+								startActivity(introIntent);
+
 							}
 						}).build().show();
 				return false;
